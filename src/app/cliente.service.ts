@@ -22,9 +22,19 @@ export class ClienteService {
       return clientes;
     }
 
-    return clientes.filter((cliente) =>
-      cliente.nome?.indexOf(nomeBusca) !== -1
+    return clientes.filter(
+      (cliente) => cliente.nome?.indexOf(nomeBusca) !== -1
     );
+  }
+
+  atualizar(cliente: Cliente) {
+    const storage = this.obterStorage();
+    storage.forEach((c) => {
+      if (c.id === cliente.id) {
+        Object.assign(c, cliente);
+      }
+    });
+    localStorage.setItem(ClienteService.REPO_CLIENTES, JSON.stringify(storage));
   }
 
   buscarClientePorId(id: string): Cliente | undefined {
