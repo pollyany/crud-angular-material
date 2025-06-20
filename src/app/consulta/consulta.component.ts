@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { ClienteService } from '../cliente.service';
 import { Cliente } from '../cadastro/cliente';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-consulta',
@@ -37,6 +38,7 @@ export class ConsultaComponent implements OnInit {
     'email',
     'acoes',
   ];
+  snack: MatSnackBar = Inject(MatSnackBar);
 
   constructor(private service: ClienteService, private router: Router) {}
 
@@ -49,17 +51,16 @@ export class ConsultaComponent implements OnInit {
   }
 
   prepararEditar(id: string) {
-    this.router.navigate(['/editar'], { queryParams: { "id": id } });
+    this.router.navigate(['/editar'], { queryParams: { id: id } });
   }
 
   prepararDeletar(cliente: Cliente) {
-   cliente.deletando = true;
-
+    cliente.deletando = true;
   }
 
   deletar(cliente: Cliente) {
     this.service.deletar(cliente);
     this.listaClientes = this.service.pesquisarClientes('');
-
+    this.snack.open('Cliente deletado com sucesso!', 'Ok');
   }
 }
