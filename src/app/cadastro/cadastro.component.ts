@@ -13,7 +13,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BrasilapiService } from '../brasilapi.service';
 import { Estado, Municipio } from '../brasilapi.modules';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-cadastro',
@@ -56,6 +56,9 @@ export class CadastroComponent implements OnInit {
         if (clienteEncontrado) {
           this.cliente = clienteEncontrado;
           this.atualizando = true;
+          if (this.cliente.uf) {
+            this.carregarMunicipios({ value: this.cliente.uf } as MatSelectChange);
+          }
         }
       }
     });
@@ -68,9 +71,19 @@ export class CadastroComponent implements OnInit {
     this.brasilApiService
       .listarUfs()
       .subscribe({
-        next: (listaEstados) => console.log(listaEstados),
+        next: (listaEstados) => this.estados = listaEstados,
         error: (err) => console.error(err),
       });
+  }
+
+  carregarMunicipios(event: MatSelectChange) {
+    const ufSelecionada = event.value;
+    this.brasilApiService.listarMunicipios(ufSelecionada).subscribe({
+      next: (listaMunicipios) => {
+        this.municipios = listaMunicipios;
+      },
+      error: (err) => console.error(err),
+    });
   }
 
   salvar() {
