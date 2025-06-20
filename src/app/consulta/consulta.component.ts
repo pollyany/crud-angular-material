@@ -26,6 +26,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './consulta.component.scss',
 })
 export class ConsultaComponent implements OnInit {
+
+  nomeBusca: string = '';
   listaClientes: Cliente[] = [];
   colunasTable: string[] = [
     'id',
@@ -35,10 +37,14 @@ export class ConsultaComponent implements OnInit {
     'email',
     'acoes',
   ];
-  
+
   constructor(private service: ClienteService) {}
 
   ngOnInit() {
     this.listaClientes = this.service.pesquisarClientes('');
+  }
+
+  pesquisar(){
+    this.listaClientes = this.service.pesquisarClientes(this.nomeBusca)
   }
 }
