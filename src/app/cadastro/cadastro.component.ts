@@ -9,10 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { Cliente } from './cliente';
 import { ClienteService } from '../cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 @Component({
   selector: 'app-cadastro',
   imports: [
     FlexLayoutModule,
+    NgxMaskDirective,
     MatCardModule,
     FormsModule,
     MatFormFieldModule,
@@ -20,6 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
     MatButtonModule,
   ],
+  providers: [provideNgxMask()],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss',
 })
@@ -27,7 +30,11 @@ export class CadastroComponent implements OnInit {
   cliente: Cliente = Cliente.newCliente();
   atualizando: boolean = false;
 
-  constructor(private service: ClienteService, private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private service: ClienteService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((query: any) => {
